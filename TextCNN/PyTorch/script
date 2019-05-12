@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#train the model using the pretrained word2vec
+python run.py -static=true -pretrainedName='merge_sgns_bigram_char300.txt' -pretrainedPath='/home/ustc/桌面/zyy/文本分类/chinese_text_cnn/pretrainedW2c'
