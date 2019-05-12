@@ -7,3 +7,5 @@
 新建目录pretrainedW2v，并将上述模型解压得到的文件，放到pretrainedW2v目录中
 
 ## TensorFlow: TODO
+
+# 2. TextRNN: TODO
