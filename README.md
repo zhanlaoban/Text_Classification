@@ -1,5 +1,7 @@
 # Text_Classification
-本项目会实现深度学习中文本分类任务的各种模型。会以PyTorch和TensorFlow两种形式实现。
+- 深度学习文本分类任务的各种模型实现  
+- 以PyTorch和TensorFlow两种形式实现  
+- 每种模型的实现原理和细节在各个模型文件的README.MD中
 
 
 
