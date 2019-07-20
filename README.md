@@ -3,8 +3,8 @@
 
 
 
-### 1.FastText: TODO
+### 1. FastText: TODO
 
-### 2. TextCNN
+### 2. [TextCNN](https://github.com/zhanlaoban/Text_Classification/tree/master/02_TextCNN)
 
 ###  3. TextRNN: TODO
