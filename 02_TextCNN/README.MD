@@ -1,5 +1,5 @@
 ## 1. TextCNN原理
-
+[TextCNN原理](https://github.com/zhanlaoban/Text_Classification/blob/master/02_TextCNN/TextCNN%E5%8E%9F%E7%90%86.md)
  
 
 ## 2. PyTorch
