@@ -54,7 +54,7 @@
 
 # 二、卷积神经网络在文本分类上的应用
 
-相关论文：[Convolutional Neural Networks for Sentence Classification](Convolutional Neural Networks for Sentence Classification)
+相关论文：[Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882)
 
 卷积神经网络的核心思想是**捕捉局部特征**，对于文本来说，局部特征就是**由若干单词组成的滑动窗口**，类似于N-gram。卷积神经网络的优势在于能够**自动地对N-gram特征进行组合和筛选，获得不同抽象层次的语义信息**。
 
