@@ -42,6 +42,7 @@ class TextCNN(nn.Module):
                     )
                  for size in filterSizes]
         self.convs = nn.ModuleList(convss)
+        #self.convs = convss
 
         self.dropout = nn.Dropout(args.dropout)
         self.fc = nn.Linear(len(filterSizes) * filterNum, classNum)

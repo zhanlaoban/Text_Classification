@@ -11,7 +11,7 @@ import TrainModel
 import DatasetPreprocess
 
 parser = argparse.ArgumentParser(description='TextCNN text classifier')
-# model hyper parameters
+# Model hyper parameters
 parser.add_argument('-lr', type=float, default=0.1, help='initial learning rate [default: 0.001]')
 parser.add_argument('-epochs', type=int, default=256, help='number of epochs for train [default: 256]')
 parser.add_argument('-batchSize', type=int, default=128, help='batch size for training [default: 128]')
@@ -21,19 +21,19 @@ parser.add_argument('-embeddingDim', type=int, default=128, help='number of embe
 parser.add_argument('-filterNum', type=int, default=110, help='number of each size of filter')
 parser.add_argument('-filterSizes', type=str, default='3,4,5', help='comma-separated filter sizes to use for convolution')
 parser.add_argument('-earlyStopping', type=int, default=1000, help='iteration numbers to stop without performance increasing')
-# word2vec parameters
+# Word embedding parameters
 parser.add_argument('-static', type=bool, default=False, help='whether to use static pre-trained word vectors')
 parser.add_argument('-fineTuneWordEm', type=bool, default=False, help='whether to fine-tune static pre-trained word vectors')
 parser.add_argument('-multichannel', type=bool, default=False, help='whether to use 2 channel of word vectors')
 parser.add_argument('-logInterval', type=int, default=1, help='how many steps to wait before logging training status [default: 1]')
 parser.add_argument('-testInterval', type=int, default=100, help='how many steps to wait before testing [default: 100]')
-# Directory
+# Directories
 parser.add_argument('-pretrainedName', type=str, default='sgns.sogounews.bigram-char', help='filename of pre-trained word vectors')
 parser.add_argument('-pretrainedPath', type=str, default='./pretrainedW2v', help='path of pre-trained word vectors')
 parser.add_argument('-saveDir', type=str, default='modelsaveDir', help='where to save the modelsavedir')
 parser.add_argument('-saveBest', type=bool, default=True, help='whether to save when get best performance')
 parser.add_argument('-loadDir', type=str, default=None, help='filename of model loadDir [default: None]')
-# device
+# Device
 parser.add_argument('-device', type=int, default=0, help='device to use for iterate data, -1 mean cpu [default: -1]')
 args = parser.parse_args()
 
