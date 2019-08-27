@@ -20,10 +20,10 @@ class TextCNN(nn.Module):
 
         embeddingNum = args.embeddingNum #the number of embedding vectors
         embeddingDim = args.embeddingDim #the dimension of embedding vector
-        filterNum = args.filterNum
+        outChannel = args.filterNum
         filterSizes = args.filterSizes
         classNum = args.classNum
-        chanelNum = 1
+        inChannel = 1
         
         self.embedding = nn.Embedding(embeddingNum, embeddingDim)
         
@@ -32,20 +32,16 @@ class TextCNN(nn.Module):
 
         if args.multichannel:
             self.embedding2 = nn.Embedding(embeddingNum, embeddingDim).from_pretrained(args.vectors , freeze = not args.fineTuneWordEm)
-            chanelNum += 1
+            inChannel += 1
         else:
             self.embedding2 = None
 
-        convss = [nn.Sequential(
-                    nn.Conv2d(chanelNum, filterNum, (size, embeddingDim)),
-                    nn.BatchNorm2d(filterNum)
-                    )
-                 for size in filterSizes]
-        self.convs = nn.ModuleList(convss)
+        self.convs = nn.ModuleList([
+            nn.Conv2d(inChannel, outChannel, (size, embeddingDim)) for size in filterSizes])
         #self.convs = convss
 
         self.dropout = nn.Dropout(args.dropout)
-        self.fc = nn.Linear(len(filterSizes) * filterNum, classNum)
+        self.fc = nn.Linear(len(filterSizes) * outChannel, classNum)
 
     def forward(self, x):
         if self.embedding2:
