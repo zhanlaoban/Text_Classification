@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description='TextCNN text classifier')
 # Model hyper parameters
 parser.add_argument('-lr', type=float, default=0.1, help='initial learning rate [default: 0.001]')
 parser.add_argument('-epochs', type=int, default=256, help='number of epochs for train [default: 256]')
-parser.add_argument('-batchSize', type=int, default=128, help='batch size for training [default: 128]')
+parser.add_argument('-batchSize', type=int, default=64, help='batch size for training [default: 128]')
 parser.add_argument('-dropout', type=float, default=0.5, help='the probability for dropout [default: 0.5]')
 parser.add_argument('-maxNorm', type=float, default=3.0, help='l2 constraint of parameters [default: 3.0]')
 parser.add_argument('-embeddingDim', type=int, default=300, help='number of embedding dimension [default: 128]')
@@ -81,8 +81,11 @@ for attr, value in sorted(args.__dict__.items()):
 textCNN = TextCNN_model.TextCNN(args)
 
 print('args.vectors ', type(args.vectors))
+print(args.vectors)
+#input = torch.randn(28043, 300)
+#print(input)
 #with SummaryWriter(log_dir='./visualLog', comment='TextCNN') as writer:
-#    writer.add_graph(textCNN, (train_iter,))
+#    writer.add_graph(textCNN, (input,))
 print(textCNN)
 
 if args.modelLoadFilename:

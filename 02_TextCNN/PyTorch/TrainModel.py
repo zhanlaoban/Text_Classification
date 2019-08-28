@@ -27,39 +27,31 @@ def train(train_iter, dev_iter, model, args):
     model.train()
 
     steps = 0
-    best_acc = 0
-    last_step = 0
+    bestAcc = 0
+    bestAcc_step = 0    #记录最佳准确率模型的步
     
     for epoch in range(1, args.epochs + 1):
         #adjust_lr(optimizer, epoch, args)
         for batch in train_iter:
             input, target = batch.text, batch.label
-            input = input.data.t()
-            print()
-            print(input)
-            print(input.data)
-            print(input.data.t())                                                                                                                                                       
-            target = target.data.sub(1)
-            #print(target.data)
+            input = input.t()
+            target = target.sub(1)  #将标签值都减一：原标签值范围为1~5，现在为0~4.
 
             if args.cuda:
                 input, target = input.cuda(), target.cuda()
-
+            
             optimizer.zero_grad()
             output = model(input)
 
-            print("output")
-            print(type(output))
-            print(output.size)
-
             loss = F.cross_entropy(output, target)
-            loss.backward()                                                                                             
-            optimizer.step()                                                                    
-            #scheduler.step(loss)
+            loss.backward()
+            
+            optimizer.step()
+
             steps += 1
             
             if steps % args.logInterval == 0:
-                corrects = (torch.max(output, 1)[1].view(target.size()).data == target.data).sum()
+                corrects = (torch.max(output, 1)[1] == target).sum()
                 train_acc = 100.0 * corrects / batch.batch_size
                 sys.stdout.write(
                     '\rBatch[{}] Training Set: - loss: {:.6f} - acc: {:.4f}%=({}/{})'.format(steps,
@@ -69,18 +61,19 @@ def train(train_iter, dev_iter, model, args):
                                                                                             batch.batch_size))
             
 
-            #save the best acc
-            if steps % args.valInterval == 0:
-                dev_acc = eval(dev_iter, model, args)
-                if dev_acc > best_acc:
-                    best_acc = dev_acc
-                    last_step = steps
+            
+            if steps % args.valInterval == 0:   #默认每100步验证一次
+                devAcc = eval(dev_iter, model, args)
+                if devAcc > bestAcc:
+                    bestAcc = devAcc
+                    bestAcc_step = steps
                     if args.modelSaveBest:
-                        print('Saving best model, acc: {:.4f}%\n'.format(best_acc))
-                        save(model, args.modelSaveDir, 'best_acc', best_acc)
-                else:  #beyond 1000 steps without performance increasing
-                    if steps - last_step >= args.earlyStopping:
-                        print('\nEarly stop by {} steps, Evaluation Set acc: {:.4f}%'.format(args.earlyStopping, best_acc))
+                        print('Best model acc: {:.4f}%\n'.format(bestAcc))
+                        save(model, args.modelSaveDir, 'bestAcc', bestAcc)
+                else:  
+                    if steps - bestAcc_step >= args.earlyStopping:  #这里使用earlyStop
+                        print('\nEarly stop by {} steps, Evaluation Set acc: {:.4f}%'.format(args.earlyStopping, bestAcc))
+                        
                         raise KeyboardInterrupt
 
 
@@ -89,35 +82,40 @@ def eval(data_iter, model, args):
     Evaluate the accuracy of the dev dataset.
 
     args:
-    data_iter: iterator of preprocessed dev dataset
-    model: the textcnn model
-    args: get the argments
+        data_iter: iterator of preprocessed dev dataset
+        model: the textcnn model
+        args: get the argments
+
+    return:
+        accuracy
 
     '''
     model.eval()
     corrects, avg_loss = 0, 0
     for batch in data_iter:
         input, target = batch.text, batch.label
-        input = input.data.t()
-        target = target.data.sub(1)
+        input = input.t()
+        target = target.sub(1)
+        
         if args.cuda:
             input, target = input.cuda(), target.cuda()
+        
         output = model(input)
         loss = F.cross_entropy(output, target)
         avg_loss += loss.item()
-        corrects += (torch.max(output, 1)[1].view(target.size()).data == target.data).sum()
+        corrects += (torch.max(output, 1)[1] == target).sum()
 
-    size = len(data_iter.dataset)
-    avg_loss /= size
-    accuracy = 100.0 * corrects / size
+    evalSetSize = len(data_iter.dataset)
+    avg_loss /= evalSetSize
+    accuracy = 100.0 * corrects / evalSetSize
     print('\n           Evaluation Set - loss: {:.6f} - acc: {:.4f}%=({}/{}) \n'.format(avg_loss,
                                                                        accuracy,
                                                                        corrects,
-                                                                       size))
+                                                                       evalSetSize))
     return accuracy
 
 
-def save(model, modelSaveDir, save_prefix, best_acc):
+def save(model, modelSaveDir, save_prefix, bestAcc):
     '''
     Save the model file.
 
@@ -125,13 +123,13 @@ def save(model, modelSaveDir, save_prefix, best_acc):
     model: the textcnn model
     modelSaveDir: the directory of save file
     save_prefix: prefix of the save file
-    best_acc: save the best accuracy to the model file
+    bestAcc: save the best accuracy to the model file
 
     '''
     if not os.path.exists(modelSaveDir):
         os.makedirs(modelSaveDir)
     save_prefix = os.path.join(modelSaveDir, save_prefix)
-    save_path = '{}_{}_{:.4f}%.pt'.format(save_prefix, time.strftime("%Y-%m-%d %H:%M", time.localtime()), best_acc)
+    save_path = '{}_{}_{:.4f}%.pt'.format(save_prefix, time.strftime("%Y-%m-%d %H:%M", time.localtime()), bestAcc)
 
     torch.save(model.state_dict(), save_path)
 
