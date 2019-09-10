@@ -40,6 +40,15 @@ class TextCNN(nn.Module):
             nn.Conv2d(inChannel, outChannel, (size, embeddingDim)) for size in filterSizes])
         #self.convs = convss
 
+        '''
+        convs = [nn.Sequential(
+                    nn.Conv2d(inChannel, outChannel, (size, embeddingDim)),
+                    nn.Conv2d(inChannel, outChannel, (size, embeddingDim))
+                    )
+                for size in filterSizes]
+
+        self.convs = nn.ModuleList(convs)
+        '''
         self.dropout = nn.Dropout(args.dropout)
         self.fc = nn.Linear(len(filterSizes) * outChannel, classNum)
 
@@ -57,5 +66,3 @@ class TextCNN(nn.Module):
         x = self.fc(x)
 
         return x
-
-
