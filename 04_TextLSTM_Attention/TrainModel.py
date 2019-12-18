@@ -24,15 +24,16 @@ def train(train_iter, dev_iter, model, args):
     #scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
 
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.1)
-    model.train()
+    
 
     steps = 0
     bestAcc = 0
     bestAcc_step = 0    #记录最佳准确率模型的步
     
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(args.epochs):
         #adjust_lr(optimizer, epoch, args)
         for batch in train_iter:
+            model.train()
             input, target = batch.text, batch.label
             input = input.t()
             target = target.sub(1)  #将标签值都减一：原标签值范围为1~5，现在为0~4.
@@ -42,7 +43,6 @@ def train(train_iter, dev_iter, model, args):
             
             optimizer.zero_grad()
             output = model(input)
-            #print(input.size())
 
             loss = F.cross_entropy(output, target)
             loss.backward()

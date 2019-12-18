@@ -58,6 +58,6 @@ def GetIterator(TEXT, LABEL, path, args, **kwargs):
     #建立LABEL的词汇表
     LABEL.build_vocab(train_dataset, dev_dataset)
     
-    train_iter, dev_iter, test_iter = data.Iterator.splits((train_dataset, dev_dataset, test_dataset), batch_sizes = (args.batchSize, len(dev_dataset)/8, len(test_dataset)/8), sort_key = lambda x: len(x.text), **kwargs)
+    train_iter, dev_iter, test_iter = data.Iterator.splits((train_dataset, dev_dataset, test_dataset), batch_sizes = (args.trainBatchSize, len(dev_dataset), len(test_dataset)), sort_key = lambda x: len(x.text), **kwargs)
     
     return train_iter, dev_iter, test_iter
