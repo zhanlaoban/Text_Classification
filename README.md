@@ -40,9 +40,12 @@ Highlights：
 
 ### 02. [TextCNN](https://github.com/zhanlaoban/Text_Classification/tree/master/02_TextCNN)
 
-### 03. TextRNN: TODO
+### 03. [TextLSTM](https://github.com/zhanlaoban/Text_Classification/tree/master/03_TextLSTM)
 
-### 04. TextRCNN:TODO
+### 04. [TextLSTM_Attention](https://github.com/zhanlaoban/Text_Classification/tree/master/04_TextLSTM_Attention)
 
-### 05. [Transformers](https://github.com/zhanlaoban/Text_Classification/tree/master/05_Transformers): doing now!!!
+### 05. [TextGRU](https://github.com/zhanlaoban/Text_Classification/tree/master/05_TextGRU)
 
+### 06. [TextRCNN](https://github.com/zhanlaoban/Text_Classification/tree/master/06_TextRCNN)
+
+### 07. [Transformers](https://github.com/zhanlaoban/Text_Classification/tree/master/07_Transformers)
